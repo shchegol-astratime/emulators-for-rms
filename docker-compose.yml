@@ -1,0 +1,29 @@
+services:
+  wms:
+    image: ${RMS_WMS_EMULATOR_IMAGE:?задайте образ, например shchegolastratime/rms-wms-emulator:0.1.0}
+    restart: unless-stopped
+    environment:
+      PORT: ${WMS_PORT}
+    ports:
+      - "${WMS_PORT}:${WMS_PORT}"
+
+  darkstoredb:
+    image: ${RMS_DARKSTOREDB_EMULATOR_IMAGE:?задайте образ, например shchegolastratime/rms-darkstoredb-emulator:0.1.0}
+    restart: unless-stopped
+    environment:
+      PORT: ${DARKSTOREDB_PORT}
+      # Адрес роботов, который DarkstoreDB отдаёт RMS; для RMS в Docker — host.docker.internal
+      ROBOT_HOST: ${DARKSTOREDB_ROBOT_HOST:-localhost}
+    ports:
+      - "${DARKSTOREDB_PORT}:${DARKSTOREDB_PORT}"
+
+
+  gantry:
+    image: ${RMS_GANTRY_EMULATOR_IMAGE:?задайте образ, например shchegolastratime/rms-gantry-emulator:0.1.0}
+    restart: unless-stopped
+    environment:
+      PORT: ${GANTRY_PORT}
+      ROBOTS: ${GANTRY_ROBOTS}
+    ports:
+      - "${GANTRY_PORT}:${GANTRY_PORT}"
+      - "${GANTRY_GRPC_PORTS}:${GANTRY_GRPC_PORTS}"
